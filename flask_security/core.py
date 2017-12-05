@@ -319,13 +319,14 @@ def _get_serializer(app, name):
     return URLSafeTimedSerializer(secret_key=secret_key, salt=salt)
 
 
-def _get_state(app, datastore, anonymous_user=None, **kwargs):
+def _get_state(app, datastore, db=None, anonymous_user=None, **kwargs):
     for key, value in get_config(app).items():
         kwargs[key.lower()] = value
 
     kwargs.update(dict(
         app=app,
         datastore=datastore,
+        db=db,
         login_manager=_get_login_manager(app, anonymous_user),
         principal=_get_principal(app),
         pwd_context=_get_pwd_context(app),
@@ -494,7 +495,7 @@ class Security(object):
 
         identity_loaded.connect_via(app)(_on_identity_loaded)
 
-        state = _get_state(app, self.datastore,
+        state = _get_state(app, self.datastore, db=db,
                            login_form=login_form,
                            confirm_register_form=confirm_register_form,
                            register_form=register_form,
@@ -504,7 +505,7 @@ class Security(object):
                            send_confirmation_form=send_confirmation_form,
                            passwordless_login_form=passwordless_login_form,
                            anonymous_user=anonymous_user,
-                           db=db)
+                           )
 
         if register_blueprint:
             app.register_blueprint(create_blueprint(state, __name__))
