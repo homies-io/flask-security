@@ -22,6 +22,8 @@ _security = LocalProxy(lambda: app.extensions['security'])
 
 _datastore = LocalProxy(lambda: _security.datastore)
 
+_db = LocalProxy(lambda: _security.db)
+
 
 def generate_confirmation_link(user):
     token = generate_confirmation_token(user)
@@ -87,6 +89,9 @@ def confirm_user(user):
     if user.confirmed_at is not None:
         return False
     user.confirmed_at = _security.datetime_factory()
-    _datastore.put(user)
+
+    _db.session.add(user)
+    _db.session.commit()
+
     user_confirmed.send(app._get_current_object(), user=user)
     return True

@@ -461,14 +461,15 @@ class Security(object):
     :param datastore: An instance of a user datastore.
     """
 
-    def __init__(self, app=None, datastore=None, **kwargs):
+    def __init__(self, app=None, datastore=None, db=None, **kwargs):
         self.app = app
         self.datastore = datastore
+        self.db = db
 
         if app is not None and datastore is not None:
-            self._state = self.init_app(app, datastore, **kwargs)
+            self._state = self.init_app(app, datastore, db, **kwargs)
 
-    def init_app(self, app, datastore=None, register_blueprint=True,
+    def init_app(self, app, datastore=None, db=None, register_blueprint=True,
                  login_form=None, confirm_register_form=None,
                  register_form=None, forgot_password_form=None,
                  reset_password_form=None, change_password_form=None,
@@ -483,6 +484,7 @@ class Security(object):
         """
         self.app = app
         self.datastore = datastore
+        self.db = db
 
         for key, value in _default_config.items():
             app.config.setdefault('SECURITY_' + key, value)
@@ -501,7 +503,8 @@ class Security(object):
                            change_password_form=change_password_form,
                            send_confirmation_form=send_confirmation_form,
                            passwordless_login_form=passwordless_login_form,
-                           anonymous_user=anonymous_user)
+                           anonymous_user=anonymous_user,
+                           db=db)
 
         if register_blueprint:
             app.register_blueprint(create_blueprint(state, __name__))
