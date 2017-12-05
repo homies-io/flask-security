@@ -427,8 +427,17 @@ def get_token_status(token, serializer, max_age=None, return_data=False):
     except (BadSignature, TypeError, ValueError):
         invalid = True
 
+    UserTypes = current_app.config.get('USER_TYPES')
+
     if data:
-        user = _datastore.find_user(id=data[0])
+        if UserTypes:
+            for UserType in UserTypes:
+                u = UserType.query.filter_by(id=data[0]).first()
+                if u is not None:
+                    user = u
+                    break
+        else:
+            user = _datastore.find_user(id=data[0])
 
     expired = expired and (user is not None)
 
