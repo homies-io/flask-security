@@ -109,10 +109,19 @@ possible using `SQLAlchemy in a declarative way
 We are gonna split the application at least in three files: app.py, database.py
 and models.py. You can also do the models a folder and spread your tables there.
 
+<<<<<<< HEAD
 - app.py ::
 
     from flask import Flask, render_template_string
     from flask_security import Security, current_user, login_required, \
+=======
+- app.py
+
+::
+
+    from flask import Flask
+    from flask_security import Security, login_required, \
+>>>>>>> master
          SQLAlchemySessionUserDatastore
     from database import db_session, init_db
     from models import User, Role
@@ -145,7 +154,13 @@ and models.py. You can also do the models a folder and spread your tables there.
     if __name__ == '__main__':
         app.run()
 
+<<<<<<< HEAD
 - database.py ::
+=======
+- database.py
+
+::
+>>>>>>> master
 
     from sqlalchemy import create_engine
     from sqlalchemy.orm import scoped_session, sessionmaker
@@ -166,7 +181,13 @@ and models.py. You can also do the models a folder and spread your tables there.
         import models
         Base.metadata.create_all(bind=engine)
 
+<<<<<<< HEAD
 - models.py ::
+=======
+- models.py
+
+::
+>>>>>>> master
 
     from database import Base
     from flask_security import UserMixin, RoleMixin

@@ -430,6 +430,7 @@ def get_token_status(token, serializer, max_age=None, return_data=False):
     UserTypes = current_app.config.get('USER_TYPES')
 
     if data:
+        UserTypes = current_app.config.get('USER_TYPES')
         if UserTypes:
             for UserType in UserTypes:
                 u = UserType.query.filter_by(id=data[0]).first()
